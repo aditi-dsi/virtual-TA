@@ -1,5 +1,8 @@
 beautifulsoup4
-openai
 markdownify
+fastapi[standard]
+mistralai
 playwright
+pydantic
+tenacity
 qdrant-client

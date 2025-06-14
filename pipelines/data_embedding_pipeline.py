@@ -4,25 +4,23 @@ import glob
 from typing import List, Dict, Any
 from tqdm import tqdm
 import uuid
-from openai import OpenAI
+from mistralai import Mistral
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import PointStruct, VectorParams, Distance, CreateCollection
 
 # === CONFIG ===
-AIPIPE_TOKEN = os.getenv("AIPIPE_TOKEN")
-EMBEDDING_MODEL = "text-embedding-3-small"
-OPENAI_BASE_URL = "https://aipipe.org/openai/v1"
-COLLECTION_NAME = "tds-embeddings"
-
-openai_client = OpenAI(api_key=AIPIPE_TOKEN, base_url=OPENAI_BASE_URL)
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+mistral_client = Mistral(api_key=MISTRAL_API_KEY)
 qdrant = QdrantClient(url="http://185.209.49.210")
+COLLECTION_NAME = "tds-embeddings"
 
 
 if COLLECTION_NAME not in [c.name for c in qdrant.get_collections().collections]:
     qdrant.create_collection(
         COLLECTION_NAME,
-        vectors_config=VectorParams(size=1536, distance=Distance.COSINE)
+        vectors_config=VectorParams(size=1024, distance=Distance.COSINE)
     )
+
 
 def chunk_text(text: str, chunk_size: int = 300, overlap: int = 50) -> List[str]:
     words = text.split()
@@ -32,12 +30,14 @@ def chunk_text(text: str, chunk_size: int = 300, overlap: int = 50) -> List[str]
         chunks.append(chunk)
     return chunks
 
+
 def embed_text(texts: List[str]) -> List[List[float]]:
-    response = openai_client.embeddings.create(
-        model=EMBEDDING_MODEL,
-        input=texts
+    response = mistral_client.embeddings.create(
+        model="mistral-embed",
+        inputs=texts
     )
     return [item.embedding for item in response.data]
+
 
 def process_discourse(json_path: str) -> List[Dict[str, Any]]:
     with open(json_path, "r", encoding="utf-8") as f:
@@ -62,6 +62,7 @@ def process_discourse(json_path: str) -> List[Dict[str, Any]]:
             })
     return chunks
 
+
 def process_markdown(md_dir: str) -> List[Dict[str, Any]]:
     chunks = []
     md_files = glob.glob(os.path.join(md_dir, "**/*.md"), recursive=True)
@@ -81,6 +82,7 @@ def process_markdown(md_dir: str) -> List[Dict[str, Any]]:
                 }
             })
     return chunks
+
 
 def embed_and_store(chunks: List[Dict[str, Any]], batch_size: int = 100):
     for i in tqdm(range(0, len(chunks), batch_size)):
