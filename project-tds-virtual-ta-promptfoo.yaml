@@ -3,7 +3,7 @@ description: "TDS Virtual TA Project Sample (but not the actual evaluation) Ques
 providers:
   - id: https
     config:
-      url: https://aditii-b6--virtual-ta-server-fastapi-app.modal.run/query # Replace this with your API endpoint
+      url: https://app.example.com/api/ # Replace this with your API endpoint
       method: POST
       headers:
         Content-Type: application/json
