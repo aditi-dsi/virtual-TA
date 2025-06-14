@@ -9,8 +9,9 @@ from app.utils.image_normalizer import normalize_image_input
 logger = logging.getLogger(__name__)
 
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+QDRANT_CLIENT_URL = os.getenv("QDRANT_CLIENT_URL", "http://localhost:6333")
 mistral_client = Mistral(api_key=MISTRAL_API_KEY)
-qdrant_client = QdrantClient(url="http://185.209.49.210")
+qdrant_client = QdrantClient(url=QDRANT_CLIENT_URL)
 COLLECTION_NAME = "tds-embeddings"
 
 LLM_MODEL = "mistral-large-latest"

@@ -10,8 +10,9 @@ from qdrant_client.http.models import PointStruct, VectorParams, Distance, Creat
 
 # === CONFIG ===
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+QDRANT_CLIENT_URL = os.getenv("QDRANT_CLIENT_URL", "http://localhost:6333")
 mistral_client = Mistral(api_key=MISTRAL_API_KEY)
-qdrant = QdrantClient(url="http://185.209.49.210")
+qdrant = QdrantClient(url=QDRANT_CLIENT_URL)
 COLLECTION_NAME = "tds-embeddings"
 
 
