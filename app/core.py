@@ -22,7 +22,7 @@ EMBEDDING_MODEL = "mistral-embed"
 def perform_health_check():
     try:
         count = qdrant_client.count(collection_name=COLLECTION_NAME, exact=True).count
-        return {"status": "healthy", "qdrant_documents": count}
+        return {"status": "healthy", "message": "Hey, I am Virtual TA for TDS course! Make api calls to /query endpoint with your question and image attachment (optional) to get answers."}
     except Exception as e:
         return {"status": "unhealthy", "error": str(e)}
     
