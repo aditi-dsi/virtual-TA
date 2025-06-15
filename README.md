@@ -6,12 +6,12 @@ This project is an AI-powered virtual assistant designed to help students of the
 
 ## Features
 
-- 🔍 Retrieval using **Qdrant** vector database with custom chunking and metadata.
-- ✅ FastAPI backend with clean modular structure.
+- 🔍 **Qdrant** vector DB for vector stores and retrieval.
+- 🌐 Playwright and Beautiful Soup for automated web scraping.
 - 🧠 LLM responses powered by **Mistral's `Mistral Large`** model.
 - 🖼️ Multimodal support: image + text query processing using **Mistral OCR**.
 - 📎 Source-aware answers with extracted source citation links for transparency.
-- 📊 Prompt evaluation using `promptfoo` to benchmark answer accuracy.
+- 📊 Evaluation using `promptfoo` to benchmark answer accuracy.
 
 ---
 
