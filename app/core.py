@@ -10,8 +10,16 @@ logger = logging.getLogger(__name__)
 
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
 QDRANT_CLIENT_URL = os.getenv("QDRANT_CLIENT_URL", "http://localhost:6333")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+print(f"Using Qdrant client URL: {QDRANT_CLIENT_URL}")
 mistral_client = Mistral(api_key=MISTRAL_API_KEY)
-qdrant_client = QdrantClient(url=QDRANT_CLIENT_URL)
+qdrant_client = QdrantClient(
+    url=QDRANT_CLIENT_URL,
+    port=443,
+    api_key=QDRANT_API_KEY,
+    https= True,
+    prefer_grpc=False
+)
 COLLECTION_NAME = "tds-embeddings"
 
 LLM_MODEL = "mistral-large-latest"
@@ -170,7 +178,7 @@ async def generate_llm_answer(question, docs):
     
     Question: {question}
     
-    Read the complete discourse discussion and other context carefully and return your response in this exact format:
+    Read the complete discourse discussion and each answer to the original post and other context carefully and return your response in this exact format:
     A complete answer with two fields:
     <A comprehensive yet concise and to the point answer>
     <A "Sources:" section that must lists the URLs and relevant text snippets you used to answer>
